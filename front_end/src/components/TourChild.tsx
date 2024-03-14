@@ -13,17 +13,22 @@ interface Tour {
 
 interface TourProps {
     setTour: React.Dispatch<React.SetStateAction<Tour | null>>;
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
     tour: Tour;
 }
 
 const Tour = (props: TourProps): ReactElement => {
-    const { tour, setTour } = props;
+    const { tour, setTour, setIsLoading } = props;
     const tourClick = async () => {
-        const response = await axios.get(
-            `tour/${tour.cityName}?date=${tour.date}`
-        );
-        console.log(response.data);
-        setTour(JSON.parse(response.data));
+        try {
+            setIsLoading(true);
+            const response = await axios.get(`tour/${tour.id}`);
+            setTour(JSON.parse(response.data));
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setIsLoading(false);
+        }
     };
     return (
         <li onClick={tourClick}>

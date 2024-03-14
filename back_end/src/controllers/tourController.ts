@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import Tour from "../database/models/Tour";
 import City from "../database/models/City";
 import TourImage from "../database/models/TourImage";
-import { uploadFile, getFile } from "../services/s3";
+import { uploadFile, getFile, deleteFile } from "../services/s3";
 
 const getAllTour = async (req: Request, res: Response) => {
     const tours = await Tour.findAll({
@@ -21,18 +21,10 @@ const getAllTour = async (req: Request, res: Response) => {
 };
 
 const getTour = async (req: Request, res: Response) => {
-    const city = await City.findOne({ where: { slug: req.params.city } });
-    if (!city) {
-        return res.status(400).json({ message: "City is not found" });
-    }
-
-    const date = req.query.date;
-    if (!date) {
-        return res.status(400).json({ message: "Please provide date" });
-    }
+    const id = req.params.id;
 
     const tour = await Tour.findOne({
-        where: { city_id: city.id, date },
+        where: { id },
         attributes: ["id", "title", "content", "date"],
         include: [TourImage, City],
     });
@@ -60,6 +52,9 @@ const getTour = async (req: Request, res: Response) => {
 };
 
 const createTour = async (req: Request, res: Response) => {
+    const { title, content, date } = req.body;
+    if (!title || !date)
+        return res.status(400).json({ message: "title or date is required" });
     const city = await City.findOne({
         where: { slug: req.params.city },
     });
@@ -69,7 +64,9 @@ const createTour = async (req: Request, res: Response) => {
 
     const data = {
         city_id: city.id,
-        ...req.body,
+        title,
+        content,
+        date,
     };
     const tour = await Tour.create(data);
 
@@ -89,4 +86,19 @@ const createTour = async (req: Request, res: Response) => {
     return res.status(201).json(tour);
 };
 
-export { getAllTour, createTour, getTour };
+const deleteTour = async (req: Request, res: Response) => {
+    const id = req.params.id;
+
+    const tour = await Tour.findOne({
+        where: { id },
+        include: [TourImage],
+    });
+    if (!tour) return res.status(404).send("Post not found");
+
+    const imgNameArr = tour.images.map((i) => i.img_name);
+    await deleteFile(imgNameArr);
+    await Tour.destroy({ where: { id } });
+    res.status(200).json(tour);
+};
+
+export { getAllTour, createTour, getTour, deleteTour };

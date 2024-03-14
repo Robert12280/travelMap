@@ -1,5 +1,10 @@
 import express from "express";
-import { getAllTour, createTour, getTour } from "../controllers/tourController";
+import {
+    getAllTour,
+    createTour,
+    getTour,
+    deleteTour,
+} from "../controllers/tourController";
 import multer, { Multer } from "multer";
 import path from "path";
 
@@ -19,6 +24,7 @@ const upload: Multer = multer({ storage: storage });
 const router = express.Router();
 
 router.route("/").get(getAllTour);
-router.route("/:city").get(getTour).post(upload.array("files"), createTour);
+router.route("/:city").post(upload.array("files"), createTour);
+router.route("/:id").get(getTour).delete(deleteTour);
 
 export default router;

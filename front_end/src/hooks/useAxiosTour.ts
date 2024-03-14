@@ -12,18 +12,22 @@ interface Tour {
 
 const useAxiosTour = (dataUrl: string) => {
     const [tourData, setTourData] = useState<Array<Tour>>([]);
+    const [tourIsLoading, setTourIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
         const controller = new AbortController();
 
         const fetchData = async (url: string) => {
             try {
+                setTourIsLoading(true);
                 const response = await axios.get(url, {
                     signal: controller.signal,
                 });
                 setTourData(response.data);
             } catch (err) {
                 setTourData([]);
+            } finally {
+                setTourIsLoading(false);
             }
         };
 
@@ -37,7 +41,7 @@ const useAxiosTour = (dataUrl: string) => {
         return cleanUp;
     }, [dataUrl]);
 
-    return { tourData };
+    return { tourData, tourIsLoading };
 };
 
 export default useAxiosTour;

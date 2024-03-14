@@ -2,6 +2,7 @@ import {
     S3Client,
     PutObjectCommand,
     GetObjectCommand,
+    DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import fs from "fs";
@@ -52,4 +53,18 @@ export async function getFile(imgNameArr: string[]): Promise<string[]> {
     }
 
     return result;
+}
+
+export async function deleteFile(imgNameArr: string[]): Promise<void> {
+    const promises = imgNameArr.map((imgName) => {
+        const deleteParams = {
+            Bucket: bucketName,
+            Key: imgName,
+        };
+
+        const command = new DeleteObjectCommand(deleteParams);
+
+        return s3.send(command);
+    });
+    await Promise.all(promises);
 }
