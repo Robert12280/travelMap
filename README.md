@@ -21,3 +21,7 @@
 -   框架：`React`
 -   `Saas`
 -   使用`Typescript`開發
+
+### 系統架構
+
+![architecture](./readme//architecture.png)

@@ -7,15 +7,6 @@ import { Link } from "react-router-dom";
 import useAxiosTour from "../hooks/useAxiosTour";
 import ReactLoading from "react-loading";
 
-interface Tour {
-    id: string;
-    title: string;
-    content: string;
-    date: string;
-    cityName: string;
-    images: string[];
-}
-
 const Home = (): ReactElement => {
     const { tourData, tourIsLoading } = useAxiosTour("tour");
     const [isLoading, setIsLoading] = useState<boolean>(false);

@@ -2,15 +2,6 @@ import { ReactElement } from "react";
 import "./TourList.sass";
 import TourChile from "./TourChild";
 
-interface Tour {
-    id: string;
-    title: string;
-    content: string;
-    date: string;
-    cityName: string;
-    images: string[];
-}
-
 interface TourListProps {
     setTour: React.Dispatch<React.SetStateAction<Tour | null>>;
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;

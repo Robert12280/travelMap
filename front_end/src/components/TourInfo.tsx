@@ -2,15 +2,6 @@ import { ReactElement } from "react";
 import "./TourInfo.sass";
 import axios from "../api/axios";
 
-interface Tour {
-    id: string;
-    title: string;
-    content: string;
-    date: string;
-    cityName: string;
-    images: string[];
-}
-
 interface TourInfoProps {
     tour: Tour | null;
     setTour: React.Dispatch<React.SetStateAction<Tour | null>>;

@@ -1,15 +1,6 @@
 import React, { ReactElement } from "react";
 import "./TaiwanMap.sass";
 
-interface Tour {
-    id: string;
-    title: string;
-    content: string;
-    date: string;
-    cityName: string;
-    images: string[];
-}
-
 interface TaiwanMapProps {
     setTour: React.Dispatch<React.SetStateAction<Tour | null>>;
     setCitySelected: React.Dispatch<React.SetStateAction<string>>;
