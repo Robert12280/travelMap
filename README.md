@@ -25,3 +25,9 @@
 ### 系統架構
 
 ![architecture](./readme//architecture.png)
+
+### 操作影片
+
+https://github.com/Robert12280/travelMap/assets/80948837/8a17087f-f707-4e83-a5f7-895a53757ce9
+
+
